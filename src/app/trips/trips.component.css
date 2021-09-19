@@ -1,0 +1,32 @@
+.trips {
+	width: 40vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	background-color: white;
+	padding: 40px;
+}
+
+.trips-header {
+	margin-bottom: 20px;
+}
+
+.trips-body {
+	margin-top: 20px;
+}
+
+.trip {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	background: #f4f4f4;
+	margin: 5px;
+	padding: 10px 20px;
+	overflow: auto;
+}
+
+.trip .companions {
+	display: flex;
+	flex-direction: row;
+}

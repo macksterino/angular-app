@@ -1,0 +1,14 @@
+<div class="sidebar">
+	<table>
+		<tbody>
+			<tr class="list-items" *ngFor="let listItem of listItems" (click)="selectItem(listItem)">
+				<td>{{ listItem.FirstName }}</td>
+				<td>{{ listItem.LastName }}</td>
+			</tr>
+			<tr class="select-buttons">
+				<button class="previous" (click)="selectPreviousItem()">Föregående person</button>
+				<button class="next" (click)="selectNextItem()">Nästa person</button>
+			</tr>
+		</tbody>
+	</table>
+</div>
