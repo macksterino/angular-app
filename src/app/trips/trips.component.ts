@@ -25,7 +25,7 @@ export class TripsComponent implements OnInit {
 
 	constructor(private httpClient: HttpClient, private sharedService: SharedService) {
 		this.sentEventSubscription = this.sharedService.receiveEvent().subscribe((data: any) => {
-			this.loadTripDetailsFromUsername(data.UserName);
+			this.loadTripDetailsFromUsername(data.userName);
 		});
 
 		this.person = {} as Person;
@@ -65,9 +65,8 @@ export class TripsComponent implements OnInit {
 		this.httpClient.get<any>(`https://services.odata.org/TripPinRESTierService/(S(bmmjuqhomfdnb1yj0vzldoqu))/People?$expand=Trips($filter=ShareId eq ${shareId})`).subscribe(
 			response => {
 				for (const person of response.value) {
-					const traveler = this.header?.traveler.FirstName.concat(this.header.traveler.LastName);
 					if (person.Trips.length != 0) {
-						if (person.FirstName.concat(person.LastName) !== traveler) {
+						if (person.UserName !== this.person.userName) {
 							companions.push(
 								person.FirstName
 							);

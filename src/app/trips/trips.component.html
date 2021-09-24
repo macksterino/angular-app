@@ -1,20 +1,22 @@
 <div class="trips">
+	<div class="introduction" *ngIf="(person | keyvalue)?.length === 0">
+		<p>Välkommen!</p>
+		<p>Klicka på en av personerna i listan till vänster för att komma igång.</p>
+	</div>
 	<div class="trips-header">
-		<h1><fa-icon [icon]="header?.gender"></fa-icon> {{ header?.traveler?.FirstName }} {{ header?.traveler?.LastName }}</h1>
-		<p *ngFor="let email of header?.emails">{{ email }}</p>
+		<h1><fa-icon [icon]="person.gender"></fa-icon> {{ person.firstName }} {{ person.lastName }}</h1>
+		<p *ngFor="let email of person.emails">{{ email }}</p>
 	</div>
 	<div class="trip" *ngFor="let trip of trips">
-		<h2>{{ trip?.title }}</h2>
-		<p>{{ trip?.date }}</p>
-		<h3>{{ trip?.description }}</h3>
+		<h2>{{ trip.title }}</h2>
+		<p>{{ trip.date }}</p>
+		<h3>{{ trip.description }}</h3>
 		<div class="companions">
-			<p>{{ (trip?.companions?.length == 0) ? '' : 'w/ ' }}</p>
-			<span class="companion" *ngFor="let companion of trip?.companions; let isLast = last"> {{ companion }}{{ isLast ? '' : ', ' }}</span>
+			<p>{{ (trip.companions?.length == 0) ? '' : 'w/ ' }}</p>
+			<span class="companion" *ngFor="let companion of trip.companions; let isLast = last"> {{ companion }}{{ isLast ? '' : ', ' }}</span>
 		</div>
 	</div>
-	<div class="error">
-		<h3>{{ (header?.traveler === undefined) ? 'Välkommen!' : '' }}</h3>
-		<p>{{ (header?.traveler === undefined) ? 'Klicka på en av personerna i listan till vänster för att komma igång.' : '' }}</p>
-		<p>{{ (header?.traveler !== undefined && trips?.length == 0) ? 'Denna person har inga resor sparade.' : '' }}</p>
+	<div class="error" *ngIf="(person | keyvalue)?.length != 0 && trips.length == 0">
+		<p>Denna person har inga resor sparade.</p>
 	</div>
 </div>
