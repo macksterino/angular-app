@@ -7,7 +7,7 @@ export type Person = {
 	firstName: string,
 	lastName: string
 	gender: any,
-	emails: Array<string>
+	emails?: Array<string>
 }
 
 @Component({
@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit {
 	}
 
 	private getPeople(): void {
-		this.httpClient.get<any>('https://services.odata.org/TripPinRESTierService/(S(y1zhhnavj3vvewm0ns3l12yo))/People?$select=FirstName,%20LastName,%20Username').subscribe(
+		this.httpClient.get<any>('https://services.odata.org/TripPinRESTierService/(S(y1zhhnavj3vvewm0ns3l12yo))/People?$select=FirstName, LastName,Username, Gender').subscribe(
 			response => {
 				for (const person of response.value) {
 					this.people.push(
@@ -37,8 +37,7 @@ export class SidebarComponent implements OnInit {
 							userName: person.UserName,
 							firstName: person.FirstName,
 							lastName: person.LastName,
-							gender: person.Gender,
-							emails: person.Emails
+							gender: person.Gender
 						}
 					);
 				}
@@ -55,7 +54,7 @@ export class SidebarComponent implements OnInit {
 		this.selectPerson(nextPerson as Person);
 	}
 
-	public selectPreviousItem(): void {
+	public selectPreviousPerson(): void {
 		const previousPerson = this.sharedService.getPreviousItemInArray(this.people, this.selectedPerson);
 		this.selectPerson(previousPerson as Person);
 	}
