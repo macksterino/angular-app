@@ -4,16 +4,9 @@ import { Component, OnInit } from '@angular/core';
 import { faFemale, faMale } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { SharedService } from '../shared.service';
-import { ListItem } from '../sidebar/sidebar.component';
+import { Person } from '../sidebar/sidebar.component';
 
-type TripHeader = {
-	traveler: ListItem,
-	gender: any,
-	emails: Array<string>,
-	error: string
-}
-
-type TripBody = {
+type Trip = {
 	title: string,
 	date: string,
 	description: string,
@@ -26,33 +19,30 @@ type TripBody = {
 	styleUrls: ['./trips.component.css']
 })
 export class TripsComponent implements OnInit {
-	header: TripHeader | undefined;
-	trips: Array<TripBody> | undefined;
+	person: Person;
+	trips: Array<Trip>;
 	sentEventSubscription: Subscription;
 
 	constructor(private httpClient: HttpClient, private sharedService: SharedService) {
 		this.sentEventSubscription = this.sharedService.receiveEvent().subscribe((data: any) => {
 			this.loadTripDetailsFromUsername(data.UserName);
 		});
-	}
 
-	ngOnInit(): void {
-		this.header = {} as TripHeader;
+		this.person = {} as Person;
 		this.trips = [];
 	}
+
+	ngOnInit(): void {}
 
 	public loadTripDetailsFromUsername(username: string): void {
 		this.httpClient.get<any>(`https://services.odata.org/TripPinRESTierService/(S(12nxq1yut5r4o3emcqekyv5f))/People('${username}')?$expand=Trips($select=Name, Description, StartsAt, EndsAt, tags, ShareId)&orderby=desc`).subscribe(
 			response => {
-				this.header = {
-					traveler: {
-						UserName: response.UserName,
-						FirstName: response.FirstName,
-						LastName: response.LastName
-					},
+				this.person = {
+					userName: response.UserName,
+					firstName: response.FirstName,
+					lastName: response.LastName,
 					gender: (response.Gender === 'Male') ? faMale : faFemale,
-					emails: response.Emails,
-					error: (response?.error?.code !== undefined) ? response.error.code : ''
+					emails: response.Emails
 				}
 
 				this.trips = [];
