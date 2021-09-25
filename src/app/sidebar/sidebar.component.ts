@@ -16,8 +16,8 @@ export type Person = {
 	styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-	people: Array<Person>;
-	selectedPerson: Person;
+	public readonly people: Array<Person>;
+	public selectedPerson: Person;
 
 	constructor(private httpClient: HttpClient, private sharedService: SharedService) {
 		this.people = [];
@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit {
 	}
 
 	private getPeople(): void {
-		this.httpClient.get<any>('https://services.odata.org/TripPinRESTierService/(S(y1zhhnavj3vvewm0ns3l12yo))/People?$select=FirstName, LastName,Username, Gender').subscribe(
+		this.httpClient.get<any>('https://services.odata.org/TripPinRESTierService/(S(y1zhhnavj3vvewm0ns3l12yo))/People?$select=FirstName, LastName, Username, Gender').subscribe(
 			response => {
 				for (const person of response.value) {
 					this.people.push(
@@ -58,5 +58,4 @@ export class SidebarComponent implements OnInit {
 		const previousPerson = this.sharedService.getPreviousItemInArray(this.people, this.selectedPerson);
 		this.selectPerson(previousPerson as Person);
 	}
-
 }

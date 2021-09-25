@@ -19,25 +19,25 @@ type Trip = {
 	styleUrls: ['./trips.component.css']
 })
 export class TripsComponent implements OnInit {
-	person: Person;
-	trips: Array<Trip>;
-	sentEventSubscription: Subscription;
+	public selectedPerson: Person;
+	public trips: Array<Trip>;
+	private readonly sentEventSubscription: Subscription;
 
 	constructor(private httpClient: HttpClient, private sharedService: SharedService) {
+		this.trips = [];
+		this.selectedPerson = {} as Person;
+
 		this.sentEventSubscription = this.sharedService.receiveEvent().subscribe((data: any) => {
 			this.loadTripDetailsFromUsername(data.userName);
 		});
-
-		this.person = {} as Person;
-		this.trips = [];
 	}
 
-	ngOnInit(): void {}
+	ngOnInit(): void { }
 
 	public loadTripDetailsFromUsername(username: string): void {
 		this.httpClient.get<any>(`https://services.odata.org/TripPinRESTierService/(S(12nxq1yut5r4o3emcqekyv5f))/People('${username}')?$expand=Trips($select=Name, Description, StartsAt, EndsAt, tags, ShareId)&orderby=desc`).subscribe(
 			response => {
-				this.person = {
+				this.selectedPerson = {
 					userName: response.UserName,
 					firstName: response.FirstName,
 					lastName: response.LastName,
@@ -65,8 +65,8 @@ export class TripsComponent implements OnInit {
 		this.httpClient.get<any>(`https://services.odata.org/TripPinRESTierService/(S(bmmjuqhomfdnb1yj0vzldoqu))/People?$expand=Trips($filter=ShareId eq ${shareId})`).subscribe(
 			response => {
 				for (const person of response.value) {
-					if (person.Trips.length != 0) {
-						if (person.UserName !== this.person.userName) {
+					if (person.Trips.length !== 0) {
+						if (person.UserName !== this.selectedPerson.userName) {
 							companions.push(
 								person.FirstName
 							);
